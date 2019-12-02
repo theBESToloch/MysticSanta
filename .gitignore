@@ -1,0 +1,11 @@
+# Default ignored files
+/workspace.xml
+.idea
+.gitignore
+/compiler.xml
+/encodings.xml
+/misc.xml
+/MysticSanta.iml
+/../MysticSanta.iml
+/uiDesigner.xml
+/vcs.xml

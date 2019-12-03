@@ -1,6 +1,8 @@
 package com.MysticSanta.Controller;
 
 import com.MysticSanta.Domain.Member;
+import com.MysticSanta.Service.MemberService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,14 +13,18 @@ import java.util.Map;
 @Controller
 public class MembersController {
 
-    private List<Member> members = new ArrayList<>();
+    @Autowired
+    MemberService memberService;
+
+
 
     @PostMapping("/addMember")
     public String member(@RequestParam String fullName,
                          @RequestParam String key,
                          Map<String, Object> model) {
-        members.add(new Member(fullName, key));
-        System.out.println(members);
+        memberService.addMember(new Member(fullName, key));
+
+        List<Member> members = memberService.getAllMembers();
         model.put("members", members);
 
         return "member";
@@ -27,9 +33,9 @@ public class MembersController {
 
     @GetMapping("/addMember")
     public String member(Map<String, Object> model) {
+        List<Member> members = memberService.getAllMembers();
 
         model.put("members", members);
-
         return "member";
     }
 

@@ -22,4 +22,9 @@ public class MemberDaoImpl implements MemberDao {
     public List<Member> getAllMembers() {
         return members;
     }
+
+    @Override
+    public long getAllMembersCount() {
+        return members.size();
+    }
 }

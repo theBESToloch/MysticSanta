@@ -8,4 +8,6 @@ public interface MemberService {
     void addMember(Member member);
 
     List<Member> getAllMembers();
+
+    Long getAllMembersCount();
 }

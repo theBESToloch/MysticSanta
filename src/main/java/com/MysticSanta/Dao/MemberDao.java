@@ -8,4 +8,6 @@ public interface MemberDao {
     void addMember(Member member);
 
     List<Member> getAllMembers();
+
+    long getAllMembersCount();
 }

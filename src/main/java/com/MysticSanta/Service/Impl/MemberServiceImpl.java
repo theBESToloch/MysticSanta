@@ -23,4 +23,11 @@ public class MemberServiceImpl implements MemberService {
     public List<Member> getAllMembers() {
         return memberDao.getAllMembers();
     }
+
+    @Override
+    public Long getAllMembersCount() {
+        return memberDao.getAllMembersCount();
+    }
+
+
 }

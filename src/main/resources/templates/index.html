@@ -3,9 +3,31 @@
 <head>
     <title>Mystic Santa</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style>
+        body h1 {
+            text-align: center;
+        }
+
+        body h2 {
+            text-align: center;
+        }
+
+        body div {
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
 <h1>Mystic Santa</h1>
-<a href="/addMember">add new member</a>
+<h2><a href="/addMember">add new member</a></h2>
+<div>
+    <span>Количество участников:</span>
+    <span th:text="${usersCount}"></span>
+</div>
+
+<div>
+    <h2><a href="/endContest">Завершить прием участников</a></h2>
+</div>
+
 </body>
 </html>

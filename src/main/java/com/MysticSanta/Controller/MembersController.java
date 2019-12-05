@@ -4,43 +4,38 @@ import com.MysticSanta.Domain.Member;
 import com.MysticSanta.Service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import static com.MysticSanta.Utils.Utils.getClientIpAddressIfServletRequestExist;
 
 @Controller
 public class MembersController {
 
+
     @Autowired
     MemberService memberService;
 
-
-
     @PostMapping("/addMember")
-    public String member(@RequestParam String fullName,
-                         @RequestParam String key,
-                         Map<String, Object> model) {
-        memberService.addMember(new Member(fullName, key));
+    public String member(@RequestParam String fullName) {
 
-        List<Member> members = memberService.getAllMembers();
-        model.put("members", members);
+        Member member = new Member(fullName, getClientIpAddressIfServletRequestExist());
 
-        return "member";
+        int index = memberService.getAllMembers().indexOf(member);
+
+        if (index != -1) {
+            memberService.getAllMembers().remove(index);
+        }
+        System.out.println("new member ip = " + member.getIp());
+        memberService.addMember(member);
+
+        return ("redirect:/");
     }
-
 
     @GetMapping("/addMember")
-    public String member(Map<String, Object> model) {
-        List<Member> members = memberService.getAllMembers();
-
-        model.put("members", members);
+    public String member() {
         return "member";
     }
 
-    @GetMapping("/")
-    public String index() {
-        return "index";
-    }
 }

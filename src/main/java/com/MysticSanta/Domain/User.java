@@ -20,6 +20,9 @@ public class User {
         this.id = String.valueOf(new Random().nextInt(100000));
         this.userId = String.valueOf(nextId++);
         this.role.add(Role.USER);
+        if (this.userId.equals("0")) {
+            this.role.add(Role.ADMIN);
+        }
     }
 
     public Set<Role> getRole() {

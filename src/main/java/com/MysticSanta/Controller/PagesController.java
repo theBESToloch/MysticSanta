@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.Map;
 
+import static com.MysticSanta.Controller.ContestController.END_CONTEST;
 import static com.MysticSanta.Utils.Utils.getUserFromSession;
 
 @Controller
@@ -21,11 +22,12 @@ public class PagesController {
 
     @GetMapping("/")
     public String index(Map<String, Object> model) {
-        com.MysticSanta.Domain.User user = getUserFromSession();
+        User user = getUserFromSession();
 
         if (user != null) {
             model.put("user", user);
             model.put("usersCount", memberService.getAllMembersCount());
+            model.put("END_CONTEST", END_CONTEST);
         }
 
         return "index";

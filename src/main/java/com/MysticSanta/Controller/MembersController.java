@@ -20,6 +20,7 @@ import static com.MysticSanta.Utils.Utils.getUserFromSession;
 @Controller
 public class MembersController {
 
+
     @Autowired
     MemberService memberService;
 
@@ -49,13 +50,6 @@ public class MembersController {
         return "redirect:/members";
     }
 
-    @Authorized
-    @Roles(Role.ADMIN)
-    @GetMapping("/endContest")
-    public String endContest() {
-        User user = getUserFromSession();
 
-        return "redirect:/";
-    }
 
 }

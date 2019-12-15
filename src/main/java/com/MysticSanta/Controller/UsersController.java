@@ -14,7 +14,7 @@ import static com.MysticSanta.Utils.Utils.addUserToSession;
 import static com.MysticSanta.Utils.Utils.getUserFromSession;
 
 @Controller
-public class UtilsController {
+public class UsersController {
 
     public static final String ERROR = "error";
 

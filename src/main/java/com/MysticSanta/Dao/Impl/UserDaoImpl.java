@@ -6,7 +6,9 @@ import com.MysticSanta.Domain.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Repository
 public class UserDaoImpl implements UserDao {
@@ -22,4 +24,11 @@ public class UserDaoImpl implements UserDao {
     public User getUser(String id) {
         return users.get(id);
     }
+
+    @Override
+    public List<User> getAllUsers() {
+        return users.keySet().stream().map((key) -> users.get(key)).collect(Collectors.toList());
+    }
+
+
 }

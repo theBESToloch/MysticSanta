@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+    <style>
+        form {
+            position: relative;
+            left: 50vw;
+            top: 50vh;
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            transform: translate(-50%, -50%);
+        }
+
+        form > div {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        form > div:last-child {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+<div style="text-align: center" th:if="${error != null}">
+    <div th:if="${error == '1'}">
+        <h3>Пожалуйста заполните оба поля</h3>
+    </div>
+</div>
+
+<form action="/register" method="post">
+    <div>
+        <label> First Name: </label>
+        <input type="text" name="firstName"/>
+    </div>
+    <div>
+        <label> Last Name: </label>
+        <input type="text" name="lastName"/>
+    </div>
+    <div>
+        <input type="submit" value="Sign In"/>
+    </div>
+</form>
+</body>
+</html>

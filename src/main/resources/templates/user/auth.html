@@ -2,7 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>AddMember</title>
+    <title>Authorization</title>
+
     <style>
         form {
             position: relative;
@@ -27,16 +28,22 @@
     </style>
 </head>
 <body>
-<form action="/addMember" method="post">
+
+<div style="text-align: center" th:if="${error != null}">
+    <div th:if="${error == '1'}">
+        <h3>Пользователь не найден. Попробуйте другой id или
+            <a href="/register">зарегистрируйтесь</a></h3>
+    </div>
+</div>
+
+<form action="/login" method="post">
     <div>
-        <label> Full Name: </label>
-        <input type="text" name="fullName"/>
+        <label> Your ID: </label>
+        <input type="text" name="id"/>
     </div>
     <div>
-        <input type="submit" value="send"/>
+        <input type="submit" value="Sign Up"/>
     </div>
-
-
 </form>
 </body>
 </html>

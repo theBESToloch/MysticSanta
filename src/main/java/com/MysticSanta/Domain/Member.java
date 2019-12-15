@@ -4,12 +4,44 @@ import java.util.Objects;
 
 public class Member {
 
-    String FullName = "";
+    String wants = "";
+    String notWants = "";
     String ip = "";
+    User user;
 
-    public Member(String fullName, String ip) {
-        FullName = fullName;
+    public Member(String wants, String notWants, String ip, User user) {
+        this.wants = wants;
+        this.notWants = notWants;
         this.ip = ip;
+        this.user = user;
+    }
+
+    public String getWants() {
+        return wants;
+    }
+
+    public void setWants(String wants) {
+        this.wants = wants;
+    }
+
+    public String getNotWants() {
+        return notWants;
+    }
+
+    public void setNotWants(String notWants) {
+        this.notWants = notWants;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
@@ -23,29 +55,5 @@ public class Member {
     @Override
     public int hashCode() {
         return Objects.hash(ip);
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
-    public String getFullName() {
-        return FullName;
-    }
-
-    public void setFullName(String fullName) {
-        FullName = fullName;
-    }
-
-    @Override
-    public String toString() {
-        return "Member{" +
-                "FullName='" + FullName + '\'' +
-                ", ip='" + ip + '\'' +
-                '}';
     }
 }

@@ -41,13 +41,17 @@ public class ContestController {
         if (allUser.size() > 1) {
             while (allMembers.size() > 0) {
                 User user = getRandomObj(allUser);
-                Member member = getRandomObj(allMembers);
-                while (user.equals(member.getUser())) {
-                    member = getRandomObj(allMembers);
+                if (allMembers.stream().anyMatch(member -> member.getUser().equals(user))) {
+                    Member member = getRandomObj(allMembers);
+                    while (user.equals(member.getUser())) {
+                        member = getRandomObj(allMembers);
+                    }
+                    YOUR_CHILD.put(user, member);
+                    allMembers.remove(member);
+                    allUser.remove(user);
                 }
-                YOUR_CHILD.put(user, member);
                 allUser.remove(user);
-                allMembers.remove(member);
+
             }
         } else {
             YOUR_CHILD.put(allUser.get(0), allMembers.get(0));

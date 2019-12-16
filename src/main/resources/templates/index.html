@@ -15,6 +15,18 @@
         body div {
             text-align: center;
         }
+
+        @keyframes blink2 {
+            0% {
+                color: rgba(255, 0, 0, 0.2);
+            }
+            51% {
+                color: rgba(255, 0, 0, 0.7);
+            }
+            100% {
+                color: rgba(255, 0, 0, 0.2);
+            }
+        }
     </style>
 </head>
 <body>
@@ -23,7 +35,8 @@
     <h2><a href="/register">Зарегистрироваться</a> / <a href="/login">Авторизоваться</a></h2>
 </div>
 <div th:if="${user != null}">
-    <h3>Ваш ID для авторизации: <span th:text="${user.getId()}"></span></h3>
+    <h1 style="color: red; animation: blink2 2s ease-in-out infinite;">Ваш ID для авторизации: <span
+            th:text="${user.getId()}"></span></h1>
     <h2><a href="/addMember">Участвовать</a></h2>
     <div>
         <span>Количество участников:</span>
@@ -35,7 +48,7 @@
 </div>
 
 <div th:if="${END_CONTEST == true}">
-    <h2><a href="/getChild">Показать</a></h2>
+    <h1><a href="/getChild">Показать</a></h1>
 </div>
 
 <div>

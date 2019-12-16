@@ -3,20 +3,24 @@ package com.MysticSanta.Aspect;
 import com.MysticSanta.Anntotation.Roles;
 import com.MysticSanta.Domain.Role;
 import com.MysticSanta.Domain.User;
+import com.MysticSanta.Utils.Utils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
-import static com.MysticSanta.Utils.Utils.getUserFromSession;
 
 @Component
 @Aspect
 public class PagesControllerAspect {
+
+    @Autowired
+    Utils utils;
 
     @Pointcut("execution(public * com.MysticSanta.Controller.PagesController+.*(..))")
     public void callAtPagesController() {
@@ -36,7 +40,7 @@ public class PagesControllerAspect {
 
     @Around("callAuthorizedUser()")
     public Object doAccessAuthorizedUserCheck(ProceedingJoinPoint pjp) throws Throwable {
-        User user = getUserFromSession();
+        User user = utils.getUserFromRequest();
         if (user == null) {
             return "redirect:/";
         }
@@ -45,7 +49,7 @@ public class PagesControllerAspect {
 
     @Around("callVisitor()")
     public Object doAccessVisitorCheck(ProceedingJoinPoint pjp) throws Throwable {
-        User user = getUserFromSession();
+        User user = utils.getUserFromRequest();
         if (user == null) {
             return pjp.proceed();
         }
@@ -54,7 +58,7 @@ public class PagesControllerAspect {
 
     @Around("callWithRole()")
     public Object doAccessRolesCheck(ProceedingJoinPoint pjp) throws Throwable {
-        User user = getUserFromSession();
+        User user = utils.getUserFromRequest();
         if (user == null) {
             return "redirect:/";
         }

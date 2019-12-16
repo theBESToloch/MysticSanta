@@ -7,13 +7,12 @@ import com.MysticSanta.Domain.Role;
 import com.MysticSanta.Domain.User;
 import com.MysticSanta.Service.MemberService;
 import com.MysticSanta.Service.UserService;
+import com.MysticSanta.Utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.*;
-
-import static com.MysticSanta.Utils.Utils.getUserFromSession;
 
 @Controller
 public class ContestController {
@@ -28,6 +27,10 @@ public class ContestController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    Utils utils;
+
+
     @Authorized
     @Roles(Role.ADMIN)
     @GetMapping("/endContest")
@@ -36,11 +39,7 @@ public class ContestController {
         List<Member> allMembers = new ArrayList<>(memberService.getAllMembers());
         List<User> allUser = new ArrayList<>(userService.getAllUser());
 
-        for (User user : allUser) {
-            if (allMembers.stream().noneMatch(member -> member.getUser().equals(user))) {
-                allUser.remove(user);
-            }
-        }
+        allUser.removeIf(user -> allMembers.stream().noneMatch(member -> member.getUser().equals(user)));
 
         if (allUser.size() > 1) {
             while (allUser.size() > 0) {
@@ -65,7 +64,7 @@ public class ContestController {
     @Authorized
     @GetMapping("/getChild")
     public String getPray(Map<String, Object> model) {
-        User user = getUserFromSession();
+        User user = utils.getUserFromRequest();
         model.put("child", YOUR_CHILD.get(user));
 
         return "viewChild";

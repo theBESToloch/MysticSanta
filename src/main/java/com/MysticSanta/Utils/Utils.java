@@ -1,54 +1,44 @@
 package com.MysticSanta.Utils;
 
 import com.MysticSanta.Domain.User;
+import com.MysticSanta.Service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
+@Component
 public class Utils {
     public static final String USER = "user";
+    public static final String USER_ID = "userId";
 
-    private static final String[] IP_HEADER_CANDIDATES = {
-            "X-Forwarded-For",
-            "Proxy-Client-IP",
-            "WL-Proxy-Client-IP",
-            "HTTP_X_FORWARDED_FOR",
-            "HTTP_X_FORWARDED",
-            "HTTP_X_CLUSTER_CLIENT_IP",
-            "HTTP_CLIENT_IP",
-            "HTTP_FORWARDED_FOR",
-            "HTTP_FORWARDED",
-            "HTTP_VIA",
-            "REMOTE_ADDR"
-    };
+    @Autowired
+    UserService userService;
 
-    public static String getClientIpAddressIfServletRequestExist() {
-
-        if (RequestContextHolder.getRequestAttributes() == null) {
-            return "0.0.0.0";
-        }
-
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        for (String header : IP_HEADER_CANDIDATES) {
-            String ipList = request.getHeader(header);
-            if (ipList != null && ipList.length() != 0 && !"unknown".equalsIgnoreCase(ipList)) {
-                String ip = ipList.split(",")[0];
-                return ip;
-            }
-        }
-
-        return request.getRemoteAddr();
-    }
-
-
-    public static void addUserToSession(User user) {
+    public void addUserToRequest(User user) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         request.getSession().setAttribute(USER, user);
+        ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getResponse()
+                .addCookie(new Cookie(USER_ID, user.getId()));
     }
 
-    public static User getUserFromSession() {
+    public User getUserFromRequest() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        return (User) request.getSession().getAttribute(USER);
+        User user = (User) request.getSession().getAttribute(USER);
+        if (user == null) {
+            List<Cookie> cookie1 = Arrays.stream(request.getCookies()).filter(cookie -> cookie.getName().equals(USER_ID)).collect(Collectors.toList());
+            if (cookie1.size() > 0) {
+                String userId = cookie1.get(0).getValue();
+                user = userService.getUser(userId);
+            }
+        }
+        return user;
     }
 }

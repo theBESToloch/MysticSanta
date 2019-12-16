@@ -5,6 +5,7 @@ import com.MysticSanta.Anntotation.Visitor;
 import com.MysticSanta.Domain.Member;
 import com.MysticSanta.Domain.User;
 import com.MysticSanta.Service.MemberService;
+import com.MysticSanta.Utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,17 +13,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.Map;
 
 import static com.MysticSanta.Controller.ContestController.END_CONTEST;
-import static com.MysticSanta.Utils.Utils.getUserFromSession;
 
 @Controller
 public class PagesController {
 
     @Autowired
+    Utils utils;
+
+    @Autowired
     MemberService memberService;
+
 
     @GetMapping("/")
     public String index(Map<String, Object> model) {
-        User user = getUserFromSession();
+        User user = utils.getUserFromRequest();
 
         if (user != null) {
             model.put("user", user);
@@ -48,7 +52,7 @@ public class PagesController {
     @Authorized
     @GetMapping("/addMember")
     public String member(Map<String, Object> model) {
-        User user = getUserFromSession();
+        User user = utils.getUserFromRequest();
         Member member = memberService.getMember(user);
 
         if (member != null) {

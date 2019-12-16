@@ -38,15 +38,19 @@ public class ContestController {
         List<Member> allMembers = memberService.getAllMembers();
         List<User> allUser = userService.getAllUser();
 
-        while (allMembers.size() > 0) {
-            User user = getRandomObj(allUser);
-            Member member = getRandomObj(allMembers);
-            while (user.equals(member.getUser())) {
-                member = getRandomObj(allMembers);
+        if (allUser.size() > 1) {
+            while (allMembers.size() > 0) {
+                User user = getRandomObj(allUser);
+                Member member = getRandomObj(allMembers);
+                while (user.equals(member.getUser())) {
+                    member = getRandomObj(allMembers);
+                }
+                YOUR_CHILD.put(user, member);
+                allUser.remove(user);
+                allMembers.remove(member);
             }
-            YOUR_CHILD.put(user, member);
-            allUser.remove(user);
-            allMembers.remove(member);
+        } else {
+            YOUR_CHILD.put(allUser.get(0), allMembers.get(0));
         }
         END_CONTEST = true;
 

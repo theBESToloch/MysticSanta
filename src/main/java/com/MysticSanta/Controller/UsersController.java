@@ -27,18 +27,16 @@ public class UsersController {
     @Visitor
     @PostMapping("/register")
     public String newUser(String firstName, String lastName, Map<String, Object> model) {
-        if (getUserFromSession() == null) {
-            if (firstName == null || firstName.isEmpty() || lastName == null || lastName.isEmpty()) {
-                model.put(ERROR, "1");
-                return "user/register";
-            }
-            User user = new User(firstName, lastName);
-
-            userService.addNewUser(user);
-            addUserToSession(user);
-
-            System.out.println("New user: " + user);
+        if (firstName == null || firstName.isEmpty() || lastName == null || lastName.isEmpty()) {
+            model.put(ERROR, "1");
+            return "user/register";
         }
+        User user = new User(firstName, lastName);
+
+        userService.addNewUser(user);
+        addUserToSession(user);
+
+        System.out.println("New user: " + user);
         return "redirect:/";
     }
 

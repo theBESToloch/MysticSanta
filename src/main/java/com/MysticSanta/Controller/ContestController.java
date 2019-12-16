@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 import static com.MysticSanta.Utils.Utils.getUserFromSession;
 
@@ -35,21 +32,26 @@ public class ContestController {
     @Roles(Role.ADMIN)
     @GetMapping("/endContest")
     public String endContest() {
-        List<Member> allMembers = memberService.getAllMembers();
-        List<User> allUser = userService.getAllUser();
+        YOUR_CHILD.clear();
+        List<Member> allMembers = new ArrayList<>(memberService.getAllMembers());
+        List<User> allUser = new ArrayList<>(userService.getAllUser());
+
+        for (User user : allUser) {
+            if (allMembers.stream().noneMatch(member -> member.getUser().equals(user))) {
+                allUser.remove(user);
+            }
+        }
 
         if (allUser.size() > 1) {
             while (allUser.size() > 0) {
-                User user = getRandomObj(allUser);
-                if (allMembers.stream().anyMatch(member -> member.getUser().equals(user))) {
-                    Member member = getRandomObj(allMembers);
-                    while (user.equals(member.getUser())) {
-                        member = getRandomObj(allMembers);
-                    }
-                    YOUR_CHILD.put(user, member);
-                    allMembers.remove(member);
+                int userIndex = getRandomObj(allUser);
+                int memberIndex = getRandomObj(allMembers);
+                while (allUser.get(userIndex).equals(allMembers.get(memberIndex).getUser())) {
+                    memberIndex = getRandomObj(allMembers);
                 }
-                allUser.remove(user);
+                YOUR_CHILD.put(allUser.get(userIndex), allMembers.get(memberIndex));
+                allMembers.remove(memberIndex);
+                allUser.remove(userIndex);
 
             }
         } else {
@@ -70,8 +72,7 @@ public class ContestController {
     }
 
 
-    private <T> T getRandomObj(List<T> list) {
-        int index = new Random().nextInt(list.size());
-        return list.get(index);
+    private <T> int getRandomObj(List<T> list) {
+        return new Random().nextInt(list.size());
     }
 }

@@ -16,7 +16,7 @@ import java.util.function.BiPredicate;
 
 @Component
 public class Decoder {
-
+/*
     private static Cipher initCipher(byte[] keyBytes, int mode) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, InvalidAlgorithmParameterException {
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         SecretKeySpec key = new SecretKeySpec(keyBytes, "AES");
@@ -75,4 +75,6 @@ public class Decoder {
         String ss = Decoder.primitiveEncode(bytes, "1234456789123456");
         System.out.println(ss);
     }
+
+ */
 }

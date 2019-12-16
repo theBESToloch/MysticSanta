@@ -65,8 +65,13 @@ public class ContestController {
     @GetMapping("/getChild")
     public String getPray(Map<String, Object> model) {
         User user = utils.getUserFromRequest();
-        model.put("child", YOUR_CHILD.get(user));
-
+        Member member = YOUR_CHILD.get(user);
+        if (member == null) {
+            model.put("error", "Вас не в списке участников либо вы не попали в рандомизацию");
+        } else {
+            model.put("error", null);
+            model.put("child", member);
+        }
         return "viewChild";
     }
 

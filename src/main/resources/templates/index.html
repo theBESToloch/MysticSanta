@@ -20,7 +20,7 @@
 <body>
 <h1>Mystic Santa</h1>
 <div th:if="${user == null}">
-    <h2><a href="/register">Sign In</a> / <a href="/login">Sign Up</a></h2>
+    <h2><a href="/register">Sign in</a> / <a href="/login">Log in</a></h2>
 </div>
 <div th:if="${user != null}">
     <h3>Your ID for authorization: <span th:text="${user.getId()}"></span></h3>

@@ -24,19 +24,27 @@ public class Utils {
     public void addUserToRequest(User user) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         request.getSession().setAttribute(USER, user);
+        Cookie cookie = new Cookie(USER_ID, user.getId());
+        cookie.setMaxAge(24 * 60 * 60);
         ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
                 .getResponse()
-                .addCookie(new Cookie(USER_ID, user.getId()));
+                .addCookie(cookie);
     }
 
     public User getUserFromRequest() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User user = (User) request.getSession().getAttribute(USER);
         if (user == null) {
-            List<Cookie> cookie1 = Arrays.stream(request.getCookies()).filter(cookie -> cookie.getName().equals(USER_ID)).collect(Collectors.toList());
-            if (cookie1.size() > 0) {
-                String userId = cookie1.get(0).getValue();
-                user = userService.getUser(userId);
+            if (request.getCookies() != null && request.getCookies().length > 0) {
+                List<Cookie> cookie1 =
+                        Arrays
+                                .stream(request.getCookies())
+                                .filter(cookie -> cookie.getName().equals(USER_ID))
+                                .collect(Collectors.toList());
+                if (cookie1.size() > 0) {
+                    String userId = cookie1.get(0).getValue();
+                    user = userService.getUser(userId);
+                }
             }
         }
         return user;

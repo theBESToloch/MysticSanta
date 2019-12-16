@@ -20,22 +20,22 @@
 <body>
 <h1>Mystic Santa</h1>
 <div th:if="${user == null}">
-    <h2><a href="/register">Sign in</a> / <a href="/login">Log in</a></h2>
+    <h2><a href="/register">Зарегистрироваться</a> / <a href="/login">Авторизоваться</a></h2>
 </div>
 <div th:if="${user != null}">
-    <h3>Your ID for authorization: <span th:text="${user.getId()}"></span></h3>
-    <h2><a href="/addMember">Participate</a></h2>
+    <h3>Ваш ID для авторизации: <span th:text="${user.getId()}"></span></h3>
+    <h2><a href="/addMember">Участвовать</a></h2>
     <div>
-        <span>Member count:</span>
+        <span>Количество участников:</span>
         <span th:text="${usersCount}"></span>
     </div>
     <div>
-        <a href="/members">Members list</a>
+        <a href="/members">Список участников</a>
     </div>
 </div>
 
 <div th:if="${END_CONTEST == true}">
-    <h2><a href="/getChild">See your prey</a></h2>
+    <h2><a href="/getChild">Показать</a></h2>
 </div>
 
 <div>

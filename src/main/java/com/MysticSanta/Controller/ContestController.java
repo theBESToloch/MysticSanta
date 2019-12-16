@@ -39,7 +39,7 @@ public class ContestController {
         List<User> allUser = userService.getAllUser();
 
         if (allUser.size() > 1) {
-            while (allMembers.size() > 0) {
+            while (allUser.size() > 0) {
                 User user = getRandomObj(allUser);
                 if (allMembers.stream().anyMatch(member -> member.getUser().equals(user))) {
                     Member member = getRandomObj(allMembers);
@@ -48,7 +48,6 @@ public class ContestController {
                     }
                     YOUR_CHILD.put(user, member);
                     allMembers.remove(member);
-                    allUser.remove(user);
                 }
                 allUser.remove(user);
 

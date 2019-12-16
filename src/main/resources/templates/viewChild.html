@@ -8,22 +8,21 @@
             display: flex;
             justify-content: center;
         }
+
     </style>
 </head>
 <body>
 <div>
-    <h3 th:text="${'firstName ='+ child.user.firstName}"></h3>
+    <h3 th:text="${'Имя: '+ child.user.firstName}"></h3>
 </div>
 <div>
-    <h3 th:text="${'lastName ='+child.user.lastName}"></h3>
+    <h3 th:text="${'Фамилия: '+child.user.lastName}"></h3>
 </div>
-
 <div>
-    <h3 th:text="${'wants ='+child.wants}"></h3>
+    <h3 th:text="${'Хотел бы получить:'+child.wants}"></h3>
 </div>
-
 <div>
-    <h3 th:text="${'notWants ='+child.notWants}"></h3>
+    <h3 th:text="${'Не хотел бы получить: '+child.notWants}"></h3>
 </div>
 
 

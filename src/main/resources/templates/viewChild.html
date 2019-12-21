@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Children</title>
+    <style>
+        div > div {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+
+    </style>
+</head>
+<body>
+<div th:if="${error != null}">
+    <h3 th:text="${error}"></h3>
+</div>
+<div th:if="${error == null}">
+    <div>
+        <h3 th:text="${'Имя: ' + child.user.firstName}"></h3>
+    </div>
+    <div>
+        <h3 th:text="${'Фамилия: ' + child.user.lastName}"></h3>
+    </div>
+    <div>
+        <h3 th:text="${'Хотел бы получить:' + child.wants}"></h3>
+    </div>
+    <div>
+        <h3 th:text="${'Не хотел бы получить: ' + child.notWants}"></h3>
+    </div>
+</div>
+
+</body>
+</html>

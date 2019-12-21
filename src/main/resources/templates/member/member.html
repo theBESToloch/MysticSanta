@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>AddMember</title>
+    <style>
+        form {
+            position: relative;
+            left: 50vw;
+            top: 50vh;
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            transform: translate(-50%, -50%);
+        }
+
+        form > div {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        form > div:last-child {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+<form action="/addMember" method="post">
+    <div>
+        <label> Что бы ты хотел? </label>
+        <input type="text" name="wants" th:value="${wants}"/>
+    </div>
+    <div>
+        <label> Что бы ты не хотел? </label>
+        <input type="text" name="notWants" th:value="${notWants}"/>
+    </div>
+
+    <div>
+        <input type="submit" value="Отправить"/>
+    </div>
+</form>
+</body>
+</html>

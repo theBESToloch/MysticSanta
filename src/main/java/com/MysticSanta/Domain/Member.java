@@ -2,35 +2,37 @@ package com.MysticSanta.Domain;
 
 public class Member {
 
-    String FullName = "";
-    String key = "";
+    String wants = "";
+    String notWants = "";
+    User user;
 
-    public String getFullName() {
-        return FullName;
+    public Member(String wants, String notWants, User user) {
+        this.wants = wants;
+        this.notWants = notWants;
+        this.user = user;
     }
 
-    public void setFullName(String fullName) {
-        FullName = fullName;
+    public String getWants() {
+        return wants;
     }
 
-    @Override
-    public String toString() {
-        return "Member{" +
-                "FullName='" + FullName + '\'' +
-                ", key='" + key + '\'' +
-                '}';
+    public void setWants(String wants) {
+        this.wants = wants;
     }
 
-    public String getKey() {
-        return key;
+    public String getNotWants() {
+        return notWants;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setNotWants(String notWants) {
+        this.notWants = notWants;
     }
 
-    public Member(String fullName, String key) {
-        FullName = fullName;
-        this.key = key;
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

@@ -3,9 +3,56 @@
 <head>
     <title>Mystic Santa</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style>
+        body h1 {
+            text-align: center;
+        }
+
+        body h2 {
+            text-align: center;
+        }
+
+        body div {
+            text-align: center;
+        }
+
+        @keyframes blink2 {
+            0% {
+                color: rgba(255, 0, 0, 0.2);
+            }
+            51% {
+                color: rgba(255, 0, 0, 0.7);
+            }
+            100% {
+                color: rgba(255, 0, 0, 0.2);
+            }
+        }
+    </style>
 </head>
 <body>
 <h1>Mystic Santa</h1>
-<a href="/addMember">add new member</a>
+<div th:if="${user == null}">
+    <h2><a href="/register">Зарегистрироваться</a> / <a href="/login">Авторизоваться</a></h2>
+</div>
+<div th:if="${user != null}">
+    <h1 style="color: red; animation: blink2 2s ease-in-out infinite;">Ваш ID для авторизации: <span
+            th:text="${user.getId()}"></span></h1>
+    <h2><a href="/addMember">Участвовать</a></h2>
+    <div>
+        <span>Количество участников:</span>
+        <span th:text="${usersCount}"></span>
+    </div>
+    <div>
+        <a href="/members">Список участников</a>
+    </div>
+</div>
+
+<div th:if="${END_CONTEST == true}">
+    <h1><a href="/getChild">Показать</a></h1>
+</div>
+
+<div>
+</div>
+
 </body>
 </html>

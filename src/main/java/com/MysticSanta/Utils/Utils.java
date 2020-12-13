@@ -1,7 +1,7 @@
 package com.MysticSanta.Utils;
 
 import com.MysticSanta.Domain.User;
-import com.MysticSanta.Service.UserService;
+import com.MysticSanta.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -19,12 +19,12 @@ public class Utils {
     public static final String USER_ID = "userId";
 
     @Autowired
-    UserService userService;
+    UserRepository userRepository;
 
     public void addUserToRequest(User user) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         request.getSession().setAttribute(USER, user);
-        Cookie cookie = new Cookie(USER_ID, user.getId());
+        Cookie cookie = new Cookie(USER_ID, user.getId().toString());
         cookie.setMaxAge(24 * 60 * 60);
         ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
                 .getResponse()
@@ -43,7 +43,7 @@ public class Utils {
                                 .collect(Collectors.toList());
                 if (cookie1.size() > 0) {
                     String userId = cookie1.get(0).getValue();
-                    user = userService.getUser(userId);
+                    user = userRepository.getOne(userId);
                 }
             }
         }

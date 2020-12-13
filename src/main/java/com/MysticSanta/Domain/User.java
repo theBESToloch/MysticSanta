@@ -1,15 +1,27 @@
 package com.MysticSanta.Domain;
 
-import java.util.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import java.util.Objects;
 
+@Entity
 public class User {
-    String firstName;
-    String lastName;
-    String id;
-    String userId;
-    Set<Role> role = new HashSet();
 
-    public static int nextId = 0;
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    private String firstName;
+
+    private String lastName;
+
+    @OneToOne
+    @JoinColumn(name = "member_id", referencedColumnName = "member_id")
+    private Member member;
 
     public User() {
     }
@@ -17,27 +29,13 @@ public class User {
     public User(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.id = String.valueOf(new Random().nextInt(100000));
-        this.userId = String.valueOf(nextId++);
-        this.role.add(Role.USER);
-        if (this.userId.equals("0")) {
-            this.role.add(Role.ADMIN);
-        }
     }
 
-    public Set<Role> getRole() {
-        return role;
-    }
-
-    public void setRole(Set<Role> role) {
-        this.role = role;
-    }
-
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -78,7 +76,12 @@ public class User {
                 '}';
     }
 
-    public String getUserId() {
-        return userId;
+    public Member getMember() {
+        return member;
+    }
+
+    public User setMember(Member member) {
+        this.member = member;
+        return this;
     }
 }

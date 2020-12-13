@@ -21,7 +21,7 @@
         <tr th:each="member : ${members}">
             <td th:text="${member.user.firstName}"></td>
             <td th:text="${member.user.lastName}"></td>
-            <td><a th:href="${'/delMember/'+member.user.userId}">Удалить</a></td>
+            <td><a th:href="${'/delMember/'+member.user.id}">Удалить</a></td>
         </tr>
     </table>
 </div>

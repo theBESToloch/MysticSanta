@@ -20,6 +20,9 @@ public class Member {
     private String wants = "";
     private String notWants = "";
 
+    @OneToOne
+    private BindMember bindMember;
+
     public Member() {
     }
 
@@ -58,6 +61,15 @@ public class Member {
 
     public Member setUser(User user) {
         this.user = user;
+        return this;
+    }
+
+    public BindMember getBindMember() {
+        return bindMember;
+    }
+
+    public Member setBindMember(BindMember memberTo) {
+        this.bindMember = memberTo;
         return this;
     }
 }

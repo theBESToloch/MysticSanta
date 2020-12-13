@@ -1,6 +1,5 @@
 package com.MysticSanta.Domain;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -60,7 +59,7 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id.equals(user.id);
+        return id != null && id.equals(user.id);
     }
 
     @Override

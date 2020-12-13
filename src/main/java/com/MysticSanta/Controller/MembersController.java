@@ -57,7 +57,7 @@ public class MembersController {
     @Roles(Role.ADMIN)
     @GetMapping("/delMember/{id}")
     public String deleteMember(@PathVariable("id") String id) {
-        Optional<User> user = userRepository.findById(id);
+        Optional<User> user = userRepository.findById(Long.valueOf(id));
         user.ifPresent(value -> memberRepository.delete(value.getMember()));
         return "redirect:/members";
     }

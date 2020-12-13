@@ -41,7 +41,7 @@ public class UsersController {
     @Visitor
     @PostMapping("/login")
     public String userAuth(String id, Map<String, Object> model) {
-        Optional<User> user = userRepository.findById(id);
+        Optional<User> user = userRepository.findById(Long.valueOf(id));
         if (user.isPresent()) {
             utils.addUserToRequest(user.get());
         } else {

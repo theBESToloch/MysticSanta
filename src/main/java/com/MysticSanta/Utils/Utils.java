@@ -11,6 +11,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -35,18 +36,27 @@ public class Utils {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User user = (User) request.getSession().getAttribute(USER);
         if (user == null) {
-            if (request.getCookies() != null && request.getCookies().length > 0) {
-                List<Cookie> cookie1 =
-                        Arrays
-                                .stream(request.getCookies())
-                                .filter(cookie -> cookie.getName().equals(USER_ID))
-                                .collect(Collectors.toList());
-                if (cookie1.size() > 0) {
-                    String userId = cookie1.get(0).getValue();
-                    user = userRepository.getOne(userId);
-                }
+            Long userId = getUserId();
+            Optional<User> byId = userRepository.findById(userId);
+            if (byId.isPresent()) {
+                user = byId.get();
             }
         }
         return user;
+    }
+
+    public Long getUserId() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        if (request.getCookies() != null && request.getCookies().length > 0) {
+            List<Cookie> cookie1 =
+                    Arrays
+                            .stream(request.getCookies())
+                            .filter(cookie -> cookie.getName().equals(USER_ID))
+                            .collect(Collectors.toList());
+            if (cookie1.size() > 0) {
+                return Long.valueOf(cookie1.get(0).getValue());
+            }
+        }
+        return null;
     }
 }

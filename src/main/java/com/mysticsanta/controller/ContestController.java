@@ -1,23 +1,18 @@
-package com.MysticSanta.Controller;
+package com.mysticsanta.controller;
 
-import com.MysticSanta.Anntotation.Authorized;
-import com.MysticSanta.Anntotation.Roles;
-import com.MysticSanta.Domain.BindMember;
-import com.MysticSanta.Domain.Member;
-import com.MysticSanta.Domain.Role;
-import com.MysticSanta.Domain.User;
-import com.MysticSanta.Utils.Utils;
-import com.MysticSanta.repositories.BindMemberRepository;
-import com.MysticSanta.repositories.MemberRepository;
-import com.MysticSanta.repositories.UserRepository;
+import com.mysticsanta.domain.BindMember;
+import com.mysticsanta.domain.Member;
+import com.mysticsanta.domain.User;
+import com.mysticsanta.repositories.BindMemberRepository;
+import com.mysticsanta.repositories.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Random;
 
 @Controller
@@ -30,21 +25,10 @@ public class ContestController {
     @Autowired
     private MemberRepository memberRepository;
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
     private BindMemberRepository bindMemberRepository;
-    @Autowired
-    private Utils utils;
 
-    @Authorized
-    @Roles(Role.ADMIN)
     @GetMapping("/endContest")
     public String endContest() {
-
-        if (END_CONTEST) {
-            return "redirect:/";
-        }
-
         List<Member> allMembersFrom = memberRepository.findAll();
         if (allMembersFrom.size() > 1) {
             List<Member> allMembersTo = new ArrayList<>(allMembersFrom);
@@ -58,32 +42,36 @@ public class ContestController {
                         .setMemberFrom(memberFrom)
                         .setMemberTo(memberTo);
 
-                BindMember save = bindMemberRepository.saveAndFlush(bindMember);
-                memberFrom.setBindMember(save);
-                memberRepository.saveAndFlush(memberFrom);
+                saveBind(memberFrom, bindMember);
 
                 allMembersFrom.remove(memberFrom);
                 allMembersTo.remove(memberTo);
             }
         } else {
-            bindMemberRepository.save(new BindMember().setMemberFrom(allMembersFrom.get(0)).setMemberTo(allMembersFrom.get(0)));
+            BindMember bindMember = new BindMember()
+                    .setMemberFrom(allMembersFrom.get(0))
+                    .setMemberTo(allMembersFrom.get(0));
+
+            saveBind(allMembersFrom.get(0), bindMember);
         }
         END_CONTEST = true;
 
         return "redirect:/";
     }
 
-    @Authorized
-    @GetMapping("/getChild")
-    public String getPray(Map<String, Object> model) {
-        Long userId = utils.getUserId();
-        Optional<User> user = userRepository.findById(userId);
-        BindMember bindMember = null;
-        if (user.isPresent()) {
-            utils.addUserToRequest(user.get());
-            bindMember = user.get().getMember().getBindMember();
-        }
+    private void saveBind(Member member, BindMember bindMember) {
+        BindMember save = bindMemberRepository.saveAndFlush(bindMember);
+        member.setBindMember(save);
+        memberRepository.saveAndFlush(member);
+    }
 
+    @GetMapping("/getChild")
+    public String getPray(@AuthenticationPrincipal User user, Map<String, Object> model) {
+        BindMember bindMember = null;
+        if (user != null) {
+            Member memberByUser = memberRepository.getMemberById(user.getMember().getId());
+            bindMember = memberByUser.getBindMember();
+        }
         if (bindMember == null) {
             model.put("error", "Вас не в списке участников либо вы не попали в рандомизацию");
         } else {

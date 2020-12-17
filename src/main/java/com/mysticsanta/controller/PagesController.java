@@ -1,33 +1,30 @@
-package com.MysticSanta.Controller;
+package com.mysticsanta.controller;
 
-import com.MysticSanta.Anntotation.Authorized;
-import com.MysticSanta.Anntotation.Visitor;
-import com.MysticSanta.Domain.Member;
-import com.MysticSanta.Domain.User;
-import com.MysticSanta.Utils.Utils;
-import com.MysticSanta.repositories.MemberRepository;
+import com.mysticsanta.domain.Member;
+import com.mysticsanta.domain.User;
+import com.mysticsanta.repositories.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 import java.util.Map;
 
-import static com.MysticSanta.Controller.ContestController.END_CONTEST;
+import static com.mysticsanta.controller.ContestController.END_CONTEST;
 
 @Controller
 public class PagesController {
 
     @Autowired
-    private Utils utils;
-
-    @Autowired
     private MemberRepository memberRepository;
 
     @GetMapping("/")
-    public String index(Map<String, Object> model) {
-        User user = utils.getUserFromRequest();
-
+    public String index(@AuthenticationPrincipal UserDetails user, Map<String, Object> model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (user != null) {
             model.put("user", user);
             model.put("usersCount", memberRepository.count());
@@ -37,22 +34,18 @@ public class PagesController {
         return "index";
     }
 
-    @Visitor
     @GetMapping("/register")
     public String newUser() {
         return "user/register";
     }
 
-    @Visitor
     @GetMapping("/login")
     public String userAuth() {
-        return "user/auth";
+        return "user/login";
     }
 
-    @Authorized
     @GetMapping("/addMember")
-    public String member(Map<String, Object> model) {
-        User user = utils.getUserFromRequest();
+    public String member(@AuthenticationPrincipal User user, Map<String, Object> model) {
         Member member = user.getMember();
 
         if (member != null) {
@@ -63,7 +56,6 @@ public class PagesController {
         return "member/member";
     }
 
-    @Authorized
     @GetMapping("/members")
     public String members(Map<String, Object> model) {
         List<Member> all = memberRepository.findAll();

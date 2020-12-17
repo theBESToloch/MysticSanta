@@ -1,14 +1,11 @@
-package com.MysticSanta.Controller;
+package com.mysticsanta.controller;
 
-import com.MysticSanta.Anntotation.Authorized;
-import com.MysticSanta.Anntotation.Roles;
-import com.MysticSanta.Domain.Member;
-import com.MysticSanta.Domain.Role;
-import com.MysticSanta.Domain.User;
-import com.MysticSanta.Utils.Utils;
-import com.MysticSanta.repositories.MemberRepository;
-import com.MysticSanta.repositories.UserRepository;
+import com.mysticsanta.domain.Member;
+import com.mysticsanta.domain.User;
+import com.mysticsanta.repositories.MemberRepository;
+import com.mysticsanta.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,24 +19,22 @@ public class MembersController {
 
     @Autowired
     private MemberRepository memberRepository;
-
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private Utils utils;
-
-    @Authorized
     @PostMapping("/addMember")
-    public String addMember(@RequestParam String wants, @RequestParam String notWants) {
-        User user = utils.getUserFromRequest();
-        Member member = user.getMember();
+    public String addMember(@AuthenticationPrincipal User user, @RequestParam String wants, @RequestParam String notWants) {
+        Member member =
+                Optional.ofNullable(user)
+                        .map(User::getMember)
+                        .map(Member::getId)
+                        .map(id -> memberRepository.getMemberById(id))
+                        .orElse(null);
         if (member == null) {
             member = new Member(wants, notWants);
             member.setUser(user);
             user.setMember(member);
         } else {
-            member.setUser(user);
             member.setWants(wants);
             member.setNotWants(notWants);
         }
@@ -48,13 +43,10 @@ public class MembersController {
 
         user = userRepository.saveAndFlush(user);
 
-        utils.addUserToRequest(user);
         System.out.println("new member ip = " + user.getId());
         return ("redirect:/");
     }
 
-    @Authorized
-    @Roles(Role.ADMIN)
     @GetMapping("/delMember/{id}")
     public String deleteMember(@PathVariable("id") String id) {
         Optional<User> user = userRepository.findById(Long.valueOf(id));

@@ -1,4 +1,4 @@
-package com.MysticSanta.Domain;
+package com.mysticsanta.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
